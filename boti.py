@@ -7,6 +7,21 @@ import talib
 from PIL import ImageGrab
 import datetime
 import time
+import subprocess
+import sys
+import os
+
+# Функция для установки необходимых пакетов
+def install_packages():
+    packages = ['numpy', 'matplotlib', 'python-binance', 'TA-Lib', 'Pillow']
+    for package in packages:
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        except Exception as e:
+            logging.error(f"Failed to install package {package}: {e}")
+
+# Установка пакетов
+install_packages()
 
 # Вставьте ваш API ключ и секрет сюда
 api_key = 'czs8NPf9uo1va2Sg4HB5NCWFO7XGNtP8RPHWLWU8eWqNw0XhqjCsPhJreJfaEMhv'
@@ -14,11 +29,6 @@ api_secret = 'v0Onk3jFT4G5Q4vufMt3eDqT2r2cKKW4NoOQC53uLNSfjRcBHfqdmYBrHaFa3Udx'
 
 # Создание клиента Binance
 client = Client(api_key, api_secret)
-
-def install_packages():
-    import subprocess
-    import sys
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy", "matplotlib", "python-binance", "TA-Lib", "Pillow"])
 
 def get_historical_klines(symbol, interval, start_str):
     """Получение исторических данных"""
@@ -101,10 +111,6 @@ def capture_screen(symbol, interval):
 def main():
     logging.basicConfig(filename='trading_signals.log', level=logging.INFO,
                         format='%(asctime)s [%(levelname)s] %(message)s')
-    try:
-        install_packages()
-    except Exception as e:
-        logging.error(f"Failed to install packages: {e}")
 
     while True:
         analyze_market()
